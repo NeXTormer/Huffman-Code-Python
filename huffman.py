@@ -1,5 +1,6 @@
 from node import Node
 import time
+import math
 
 start_time = time.perf_counter();
 
@@ -93,11 +94,6 @@ for i in items:
     node, path = find_in_tree(i)
     code_table[node.key] = path
 
-end_time = time.perf_counter();
-
-print(code_table)
-print("Time: ", end_time - start_time)
-
 # encoding
 
 output = []
@@ -107,19 +103,20 @@ for i in input:
 
 output = "".join(output)
 
-print(output)
-print(len(output) / 8.0)
+# invert code_table
+decode_table = {v: k for k, v in code_table.items()}
 
+decoded_string = ""
 
+curr_word = ""
+for i in output:
+    curr_word = curr_word + i
+    if curr_word in decode_table:
+        decoded_string = decoded_string + decode_table[curr_word]
+        curr_word = ""
 
-
-
-
-
-
-
-
-
-
-
-
+end_time = time.perf_counter();
+print("Time: ", end_time - start_time)
+print("Coded String: ", output)
+print("Bytes: ", math.ceil(len(output) / 8.0))
+print("Decoded String: ", decoded_string)
