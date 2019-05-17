@@ -1,5 +1,7 @@
 from node import Node
+import time
 
+start_time = time.perf_counter();
 
 idcounter = 0
 def getNewID():
@@ -15,6 +17,7 @@ with open("moserunser.txt") as file:
 # count probabilities
 
 prob = {}
+items = []
 
 for i in input:
     if i in prob:
@@ -26,6 +29,7 @@ nodes = []
 
 for key, value in prob.items():
     nodes.append(Node(getNewID(), key, value))
+    items.append(key)
 
 # generate huffman tree
 
@@ -50,31 +54,61 @@ while True:
     else:
         break
 
-# encoding
+# indexing
 
+path_t = []
 
-def find_recursive(key, node, right=True):
+def find_recursive(key, node):
     if key is not node.key:
         found = None
         if node.right is not None:
             t = find_recursive(key, node.right)
             if t is not None:
                 found = t
+                path_t.append(0)
         if node.left is not None:
             t = find_recursive(key, node.left)
             if t is not None:
                 found = t
+                path_t.append(1)
         return found
     return node
 
 
-        
-werner = find_recursive("e", nodes[0]);
+def find_in_tree(key):
+    global path_t
+    path_t = []
+    result = find_recursive(key, nodes[0])
+    path_t.reverse()
+    path_s = ""
+    for i in path_t:
+        path_s = path_s + str(i)
 
-print(werner)
+    return result, path_s
 
 
+code_table = {}
 
+for i in items:
+    node, path = find_in_tree(i)
+    code_table[node.key] = path
+
+end_time = time.perf_counter();
+
+print(code_table)
+print("Time: ", end_time - start_time)
+
+# encoding
+
+output = []
+
+for i in input:
+    output.append(code_table[i])
+
+output = "".join(output)
+
+print(output)
+print(len(output) / 8.0)
 
 
 
