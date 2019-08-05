@@ -11,7 +11,7 @@ def getNewID():
     return idcounter
 
 input = ""
-with open("moserunser.txt") as file:
+with open("thelastwish.txt", encoding="utf8") as file:
     input = file.read()
 
 
@@ -117,6 +117,6 @@ for i in output:
 
 end_time = time.perf_counter();
 print("Time: ", end_time - start_time)
-print("Coded String: ", output)
+# print("Coded String: ", output)
 print("Bytes: ", math.ceil(len(output) / 8.0))
-print("Decoded String: ", decoded_string)
+# print("Decoded String: ", decoded_string)
